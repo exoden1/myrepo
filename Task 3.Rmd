@@ -1,0 +1,64 @@
+---
+title: "Questions that Can be Answered by Usinf Data"
+output: 
+  html_document:
+    theme: cerulean
+---
+```{r, include = FALSE}
+library(car)
+library(mosaic)
+library(pander)
+library(scatterplot3d)
+library(plotly)
+library(ggplot2)
+library(tidyverse)
+library(DT)
+library(openxlsx)
+```
+```{r}
+library(tidyverse)
+dat <- read_csv("https://byuistats.github.io/M335/data/rcw.csv", 
+                col_types = cols(Semester_Date = col_date(format = "%m/%d/%y"), Semester = col_factor(levels = c("Winter", "Spring", "Fall"))))
+```
+
+```{r}
+data <- read.xlsx("C:/Users/exoni/Downloads/department_data.xlsx")
+```
+
+## Can the total number in populations help in predicting the increase or decrease of crimes in a country?
+
+This question can be addressed in two months because the data that can help to address the question is already available. It would only require cleaning the data and running some statitis in order to find whether or not the crime rate can be predicted by using the total number of crimes in a country. Some people have already studied this question,. An analysis found on https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2305136 shows that if "the population of a country were to increase by 100%, the total number of crimes would increase by 120%."
+
+## How often does one need to exercise to have a normal heart rate?
+This question can take either much or less time depending on the method that was used to collect the data. If one decides to use data that was already collected by others, it would take less time. However, if one decides to start by collecting data, the study would take more than 2 moths. It would require to have a pre and post data type. 
+Some people have already tried to answer this question. An article from https://www.cdc.gov/physicalactivity/basics/measuring/heartrate.htm shows that it is not only exercising that matters. The heart rate depends also on the age of the individual. That means that data would probably need to be collected by age groups, origin, genetics, and many other factors.
+
+
+## Which gender is more at risk than the other for stroke?
+
+
+At first glance, this looks like a question that can be answered even without data. However, according to some people i talk to, it is one of the questions that can't be addressed without data. The amount of time used to address the question based on the method used to get the data. It would take less than two months if one uses data that is readily available. However, if one decides to collect data, it would end up taking years to address this questions.
+Some reaseachers have already tried to address this question. A study by the American Heart Association shows that there are amny physiological factors that are involved, but it shows women seem to be less affected than men on average. 
+## How does the price of non-dairy milk products affect the price of dairy products and the dairy industry?
+With more people becoming becoming more careful when it comes to what they eat, the dairy industry is one of the many industries that face challenges. Analyzing the effect of non-dairy milk product such as plant-based product cannot take more time. Many people especially Agricultural economists have been doing studies that show how the dairy industry has been affected by the plant-based products. An article from https://www.mintel.com/press-centre/food-and-drink/us-non-dairy-milk-sales-grow-61-over-the-last-five-years shows how the sales for dairy based products has been affected by the increase of plant-based milk products. 
+
+## Code to improve Data Visualization by Research and Creative Works Conference.
+
+```{r}
+rcw <- read.csv("C:/Users/exoni/OneDrive/Documents/RCW.csv")
+```
+
+```{r}
+library(tidyverse)
+dat <- read_csv("https://byuistats.github.io/M335/data/rcw.csv", 
+                col_types = cols(Semester_Date = col_date(format = "%m/%d/%y"), Semester = col_factor(levels = c("Winter", "Spring", "Fall"))))
+str(dat)
+year <- as.factor(dat$Year)
+```
+
+
+
+```{r}
+ggplot(dat, aes(Department, Count, color = year,size=Count)) + geom_point()
+```
+
