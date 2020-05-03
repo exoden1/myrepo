@@ -1,0 +1,41 @@
+---
+title: 'Case Study 2: Wealth and Life Expectancy (Gapminder)'
+author: "Exode"
+date: "5/2/2020"
+output: html_document
+---
+```{r}
+library(gapminder)
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+```
+
+## Background
+
+In this case study, I learned how to use facet_grid() and facet_wrap()
+
+```{r}
+gap <- filter(gapminder, country !="Kuwait")
+gap$Population <- gap$pop/100000
+
+```
+
+```{r}
+p<- ggplot(data = gap, mapping = aes(x = lifeExp, y = gdpPercap)) + geom_point(mapping = aes(color = continent, size = Population))+
+  facet_grid(~ year) + theme_bw() +scale_y_continuous(trans = "sqrt")
+p
+```
+
+```{r}
+gap1 <- gap %>% group_by(continent) %>% summarise(mean= weighted.mean(gdpPercap))
+gap1
+```
+
+
+```{r}
+gap <- filter(gapminder, country !="Kuwait")
+gap$Population <- gap$pop/40000
+ggplot(data = gap,aes(year, gdpPercap))+geom_point(aes(color = continent, size = Population))+facet_wrap(~continent) + theme_bw() +scale_y_continuous(trans = "sqrt")+geom_path(aes(linetype=continent))
+```
+
