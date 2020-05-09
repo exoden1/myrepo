@@ -4,7 +4,11 @@ author: "Exode"
 date: "5/2/2020"
 output: html_document
 ---
+<<<<<<< HEAD
 ```{r include=FALSE}
+=======
+```{r}
+>>>>>>> ebe14395f1c921b6d2938dec9d16ab7ec4760725
 library(gapminder)
 library(tidyverse)
 library(dplyr)
@@ -28,6 +32,7 @@ p
 ```
 
 ```{r}
+<<<<<<< HEAD
 gap1 <- gap %>% group_by(continent,year) %>% summarise(mean= weighted.mean(gdpPercap),pop=mean(Population))
 gap1
 gap <- filter(gapminder, country !="Kuwait")
@@ -44,3 +49,16 @@ ggplot(gap, aes(x=year,y=gdpPercap,color=continent))+labs(y="GDP per Cap")+geom_
 ```
 
 
+=======
+gap1 <- gap %>% group_by(continent) %>% summarise(mean= weighted.mean(gdpPercap))
+gap1
+```
+
+
+```{r}
+gap <- filter(gapminder, country !="Kuwait")
+gap$Population <- gap$pop/40000
+ggplot(data = gap,aes(year, gdpPercap))+geom_point(aes(color = continent, size = Population))+facet_wrap(~continent) + theme_bw() +scale_y_continuous(trans = "sqrt")+geom_path(aes(linetype=continent))
+```
+
+>>>>>>> ebe14395f1c921b6d2938dec9d16ab7ec4760725
