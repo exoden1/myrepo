@@ -1,0 +1,82 @@
+---
+title: 'Case Study 3 : Give Your Visualizations Wings to Fly'
+author: "Exode"
+date: "5/9/2020"
+output: html_document
+---
+```{r, include = FALSE}
+library(car)
+library(mosaic)
+library(pander)
+library(scatterplot3d)
+library(plotly)
+library(ggplot2)
+library(tidyverse)
+library(DT)
+library(broom)
+library(ourworldindata)
+library(nycflights13)
+```
+```{r include=FALSE}
+glimpse(flights)
+```
+```{r include=FALSE}
+fligh <- subset(flights,dep_time <= 1200&origin=="JFK"| origin=="LGA"|origin=="EWR"&dep_delay<=quantile(dep_delay,0.75,na.rm=TRUE))
+glimpse(fligh)
+```
+```{r include=FALSE}
+fli<-fligh %>% group_by(carrier,origin) %>% summarise(q3 = quantile(dep_delay,0.75,na.rm=TRUE))
+```
+
+## Background
+
+The data was tried from the nycflights13::flights dataset that contains information about flights that departed JFK, LGA, or EWR in 2013. We are going to use the data to answer a few questions. We will try which airline have the least departure delay time and which airport one should fly from if they don't want to arrive to their destination with a huge delay.
+```{r}
+flig <- fli %>% group_by(carrier,origin) %>% summarise(delay=min(q3))
+```
+
+
+##Questions
+
+
+**Question1: If I am leaving before noon, which two airlines do you recommend at each airport (JFK, LGA, EWR) that will have the lowest delay time at the 75th percentile?**
+
+```{r}
+K <- flig %>% ggplot(aes(x=reorder(carrier,desc(delay)),y=delay,color=carrier))+geom_point()+facet_wrap(~origin,nrow=3)+labs(title="Airlines with the Lowest Delay Time at the 75th Percentile",x="Carrier",y="Delay")+geom_col()+theme_dark()
+
+ggplotly(K, tooltip=c("carrier","delay"))
+```
+```{r}
+ggsave("plot1.png")
+```
+
+*Thus, if one is flying from EWR, I would recommend VX and DL because they have the lowest departure delay time at the 75th percentile.*
+
+
+*Thus, if one is flying from JFK, I would recommend MK and AA because they have the lowest departure delay time at the 75th percentile.*
+
+*Thus, if one is flying from EWR, I would recommend US and 00 because they have the lowest departure delay time at the 75th percentile.*
+
+```{r include=FALSE}
+pander(flights %>% group_by(carrier,origin) %>% summarise(q3=quantile(dep_delay,0.75,na.rm=TRUE)))
+```
+```{r}
+f <- subset(flights, carrier=="DL")
+```
+```{r}
+fi <- f %>% group_by(carrier,origin) %>% summarise(arrival_delay=min(arr_delay,na.rm=TRUE))
+```
+
+**Question2: Which origin airport is best to minimize my chances of a late arrival when I am using Delta Airlines?**
+
+```{r}
+
+K <- fi %>% ggplot(aes(x=reorder(origin,desc(arrival_delay)),y=arrival_delay,size=arrival_delay,color=origin))+geom_point()+labs(y="Minimun Arrival Delay in Minutes",x="carrier",title="Best Airport to Fly From in Order to Minimize\n Arrival Delay Time When Flying With Delta Airlines")+ theme(plot.title = element_text(hjust = .5))
+
+ggplotly(K, tooltip=c("origin","arrival_delay"))
+```
+```{r}
+ggsave("plot2.png")
+```
+
+**To minimize the day arrival delay, one should fly from JFK if they are flying with Delta airlines**
